@@ -36,3 +36,37 @@ test "B) 1. La creacion de un gremio no falla si cumple con la cantidad minima d
 	assert.doesNotThrowException({ new Gremio(miembros = [mago1, mago2]) })
 }
 
+test "B) 2. Un gremio desafia a otro mago" {
+	const varita = new Varita(poderBase = 80) 
+	const tunica = new Tunica(poderBase = 40, tipo = comun) 
+	const mago1 = new Mago(objetosMagicos = [tunica], poderInnato = 5, nombre = "juan", resistenciaMagica = 10, energiaMagica = 30, categoria = aprendiz)
+	const mago2 = new Mago(objetosMagicos = [varita, tunica], poderInnato = 8, nombre = "david", resistenciaMagica = 40, energiaMagica = 80, categoria = veterano)
+	const gremio = new Gremio(miembros = [mago1, mago2])
+
+	const magoEnemigo = new Mago(objetosMagicos = [varita], poderInnato = 1, nombre = "flor", resistenciaMagica = 100, energiaMagica = 10, categoria = aprendiz)
+
+	gremio.desafiarMago(magoEnemigo)
+
+	// El gremio le gano al mago 
+	assert.equals(5, magoEnemigo.energiaMagica()) // El mago enemigo perdio energia magica
+	assert.equals(82.5, gremio.lider().energiaMagica()) // El lider del gremio gano energia magica
+}
+
+test "B) 2. Un gremio desafia a otro gremio" {
+	const varita1 = new Varita(poderBase = 80) 
+	const tunica1 = new Tunica(poderBase = 40, tipo = comun) 
+	const mago1 = new Mago(objetosMagicos = [tunica1], poderInnato = 5, nombre = "juan", resistenciaMagica = 10, energiaMagica = 30, categoria = aprendiz)
+	const mago2 = new Mago(objetosMagicos = [varita1, tunica1], poderInnato = 8, nombre = "david", resistenciaMagica = 40, energiaMagica = 80, categoria = veterano)
+	const gremio1 = new Gremio(miembros = [mago1, mago2])
+
+	const varita2 = new Varita(poderBase = 100) 
+	const tunica2 = new Tunica(poderBase = 400, tipo = epica)
+	const mago3 = new Mago(objetosMagicos = [tunica2], poderInnato = 7, nombre = "martin", resistenciaMagica = 50, energiaMagica = 50, categoria = veterano)
+	const mago4 = new Mago(objetosMagicos = [varita2, tunica1], poderInnato = 10, nombre = "tomas", resistenciaMagica = 10, energiaMagica = 300, categoria = veterano)
+	const gremio2 = new Gremio(miembros = [mago3, mago4])
+
+	gremio1.desafiarGremio(gremio2)
+	assert.equals(37.5, gremio2.lider().energiaMagica()) 
+	// El gremio 2 le gana al gremio 1 ya que su lider gana energia magica
+}
+
