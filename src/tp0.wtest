@@ -1,5 +1,38 @@
 import tp.*
 
-test "Test de ejemplo" {
-		assert.equals(4, 2 + 2)
+test "A) 1. Calcular el poder total de un mago" {
+	const varita = new Varita(poderBase = 80) // poder = 120
+	const tunica = new Tunica(poderBase = 40, tipo = comun) // poder = 120
+	const mago = new Mago(objetosMagicos = [varita, tunica], poderInnato = 5, nombre = "juan", resistenciaMagica = 40, energiaMagica = 30, categoria = aprendiz)
+
+	assert.equals(1200, mago.poderTotal())
 }
+
+test "A) 2. Un mago desafia a otro" {
+	const varita = new Varita(poderBase = 80) // poder = 120
+	const tunica = new Tunica(poderBase = 40, tipo = comun) 
+
+	const atacante = new Mago(objetosMagicos = [varita, tunica], poderInnato = 8, nombre = "david", resistenciaMagica = 40, energiaMagica = 80, categoria = veterano)
+	const enemigo = new Mago(objetosMagicos = [tunica], poderInnato = 5, nombre = "juan", resistenciaMagica = 10, energiaMagica = 30, categoria = aprendiz)
+
+	atacante.desafiar(enemigo)
+	assert.equals(87.5, atacante.energiaMagica()) // gana puntos (empezo con 80)
+	assert.equals(15, enemigo.energiaMagica()) // pierde puntos (empezo con 30)
+}
+
+test "B) 1. La creacion de un gremio falla si no cumple con la cantidad minima de miembros" {
+	const tunica = new Tunica(poderBase = 40, tipo = comun) 
+	const mago = new Mago(objetosMagicos = [tunica], poderInnato = 5, nombre = "juan", resistenciaMagica = 10, energiaMagica = 30, categoria = aprendiz)
+
+	assert.throwsException({ new Gremio(miembros = [mago]) })
+}
+
+test "B) 1. La creacion de un gremio no falla si cumple con la cantidad minima de miembros" {
+	const varita = new Varita(poderBase = 80) 
+	const tunica = new Tunica(poderBase = 40, tipo = comun) 
+	const mago1 = new Mago(objetosMagicos = [tunica], poderInnato = 5, nombre = "juan", resistenciaMagica = 10, energiaMagica = 30, categoria = aprendiz)
+	const mago2 = new Mago(objetosMagicos = [varita, tunica], poderInnato = 8, nombre = "david", resistenciaMagica = 40, energiaMagica = 80, categoria = veterano)
+
+	assert.doesNotThrowException({ new Gremio(miembros = [mago1, mago2]) })
+}
+
